@@ -23,3 +23,5 @@
 - Lesson 6: Login
   - [6.1 Android Login with FirebaseUI](https://codelabs.developers.google.com/codelabs/advanced-android-kotlin-training-login/#0)
   - [6.2 Android Conditional Navigation with Login](https://codelabs.developers.google.com/codelabs/advanced-android-kotlin-training-login-navigation/#0)
+- Lesson 7: Dependency Injection
+  - [7.1 Using Dagger in an Android App](https://codelabs.developers.google.com/codelabs/android-dagger/#0)
