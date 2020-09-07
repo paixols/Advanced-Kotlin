@@ -25,3 +25,4 @@
   - [6.2 Android Conditional Navigation with Login](https://codelabs.developers.google.com/codelabs/advanced-android-kotlin-training-login-navigation/#0)
 - Lesson 7: Dependency Injection
   - [7.1 Using Dagger in an Android App](https://codelabs.developers.google.com/codelabs/android-dagger/#0)
+  - [7.2 Using Hilt in Android App](https://codelabs.developers.google.com/codelabs/android-hilt/#0)
