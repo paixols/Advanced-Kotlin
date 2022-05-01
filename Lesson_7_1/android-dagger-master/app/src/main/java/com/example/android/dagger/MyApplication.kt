@@ -17,12 +17,21 @@
 package com.example.android.dagger
 
 import android.app.Application
+import com.example.android.dagger.di.AppComponent
+import com.example.android.dagger.di.DaggerAppComponent
 import com.example.android.dagger.storage.SharedPreferencesStorage
 import com.example.android.dagger.user.UserManager
 
+
 open class MyApplication : Application() {
 
-    open val userManager by lazy {
-        UserManager(SharedPreferencesStorage(this))
+    /*
+    * [AppComponent] that will be accessed by all Activities in the application
+    * This creates an instance of the [AppComponent] using its factory constructor, and we pass
+    * the [Context] that will be used for all the dependency graph.
+    * */
+    val appComponent: AppComponent by lazy {
+        DaggerAppComponent.factory().create(applicationContext)
     }
+
 }

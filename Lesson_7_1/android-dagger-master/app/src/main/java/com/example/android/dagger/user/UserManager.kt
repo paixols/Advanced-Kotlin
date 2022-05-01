@@ -18,6 +18,7 @@ package com.example.android.dagger.user
 
 import com.example.android.dagger.storage.Storage
 import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val REGISTERED_USER = "registered_user"
 private const val PASSWORD_SUFFIX = "password"
@@ -25,20 +26,42 @@ private const val PASSWORD_SUFFIX = "password"
 /**
  * Handles User lifecycle. Manages registrations, logs in and logs out.
  * Knows when the user is logged in.
+ *
+ * @Singleton scoped class. The same instance will be will be provided to all activities.
+ *
+ *
+ * Since [UserManager] will be in charge of managing the [UserComponent] lifecycle, it needs to
+ * know how to create an instance of it.
  */
-class UserManager @Inject constructor(private val storage: Storage) {
+
+@Singleton
+class UserManager @Inject constructor(
+    private val storage: Storage,
+    private val userComponentFactory: UserComponent.Factory
+) {
 
     /**
      *  UserDataRepository is specific to a logged in user. This determines if the user
      *  is logged in or not, when the user logs in, a new instance will be created.
      *  When the user logs out, this will be null.
      */
-    var userDataRepository: UserDataRepository? = null
+    //var userDataRepository: UserDataRepository? = null
+
+    /*
+    * We can keep an instance of [UserComponent] in [UserManager] to manage it's lifetime.
+    * The user will be logged in if the [UserComponent] is not null. When the user logs out, we
+    * can remove the instance.
+    * In this way, since [UserComponent] contains all the data and instances of classes related
+    * to a specific user, when the user logs out, when we destroy the component, all the data will
+    * be removed from memory.
+    * */
+    var userComponent: UserComponent? = null
+        private set
 
     val username: String
         get() = storage.getString(REGISTERED_USER)
 
-    fun isUserLoggedIn() = userDataRepository != null
+    fun isUserLoggedIn() = userComponent != null
 
     fun isUserRegistered() = storage.getString(REGISTERED_USER).isNotEmpty()
 
@@ -60,7 +83,7 @@ class UserManager @Inject constructor(private val storage: Storage) {
     }
 
     fun logout() {
-        userDataRepository = null
+        userComponent = null
     }
 
     fun unregister() {
@@ -71,6 +94,6 @@ class UserManager @Inject constructor(private val storage: Storage) {
     }
 
     private fun userJustLoggedIn() {
-        userDataRepository = UserDataRepository(this)
+        userComponent = userComponentFactory.create()
     }
 }
